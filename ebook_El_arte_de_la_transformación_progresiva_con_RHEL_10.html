@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>El arte de la transformación progresiva con Red Hat Enterprise Linux</title>
+
+  <style>
+    :root {
+      --rh-red: #cc0000;
+      --rh-dark: #000000;
+      --rh-gray-900: #1a1a1a;
+      --rh-gray-700: #4d4d4d;
+      --rh-gray-400: #999999;
+      --rh-bg-alt: #f5f5f5;
+      --font-body: -apple-system, BlinkMacSystemFont, "Red Hat Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-heading: "Red Hat Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background-color: #ffffff;
+      color: var(--rh-gray-900);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+
+    header.hero {
+      background-color: var(--rh-dark);
+      color: #ffffff;
+      padding: 3rem 1rem 2rem;
+    }
+
+    header.hero .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header.hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 2.4vw, 2.75rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 1rem;
+    }
+
+    header.hero p.subtitle {
+      font-size: 1.125rem;
+      color: #ffffff;
+      max-width: 48rem;
+      margin: 0 0 1.5rem;
+    }
+
+    header.hero .meta {
+      color: var(--rh-gray-400);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+
+    nav.toc {
+      background-color: var(--rh-bg-alt);
+      border-top: 4px solid var(--rh-red);
+      border-bottom: 1px solid #e0e0e0;
+      padding: 2rem 1rem;
+    }
+
+    nav.toc .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav.toc h2 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      color: var(--rh-gray-900);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    nav.toc ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px,100%),1fr));
+      gap: 0.5rem 2rem;
+      font-size: 0.95rem;
+    }
+
+    nav.toc li a {
+      text-decoration: none;
+      color: var(--rh-gray-700);
+      line-height: 1.4;
+    }
+
+    nav.toc li a span.num {
+      color: var(--rh-red);
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    main {
+      padding: 2rem 1rem 4rem;
+    }
+
+    .section-wrapper {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+    }
+
+    section.chapter-header {
+      margin-bottom: 2rem;
+    }
+
+    section.chapter-header h2 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      line-height: 1.25;
+      font-weight: 600;
+      color: var(--rh-dark);
+      margin: 0 0 0.5rem;
+    }
+
+    section.chapter-header .chapter-note {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--rh-red);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+    }
+
+    section.chapter-header p.lead {
+      font-size: 1.125rem;
+      line-height: 1.45;
+      color: var(--rh-gray-700);
+      margin: 0;
+      max-width: 46rem;
+    }
+
+    article.chapter-body p {
+      margin: 0 0 1rem;
+      color: var(--rh-gray-900);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    /* Destacado tipo "key takeaway" */
+    .key-takeaway {
+      border-left: 4px solid var(--rh-red);
+      background-color: var(--rh-bg-alt);
+      padding: 1rem 1.25rem;
+      margin: 2rem 0;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--rh-gray-900);
+    }
+
+    .key-takeaway strong {
+      color: var(--rh-dark);
+      font-weight: 600;
+    }
+
+    /* Bullets de valor */
+    ul.value-list {
+      margin: 1rem 0 2rem;
+      padding-left: 1rem;
+    }
+
+    ul.value-list li {
+      margin-bottom: 0.5rem;
+      color: var(--rh-gray-900);
+      line-height: 1.45;
+    }
+
+    /* CTA final */
+    footer.cta {
+      background-color: var(--rh-dark);
+      color: #ffffff;
+      padding: 3rem 1rem;
+    }
+
+    footer.cta .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    footer.cta h2 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      line-height: 1.25;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 1rem;
+    }
+
+    footer.cta p {
+      max-width: 46rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #ffffff;
+      margin: 0 0 1rem;
+    }
+
+    footer.cta .action-note {
+      font-size: 0.875rem;
+      color: var(--rh-gray-400);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO / portada -->
+  <header class="hero">
+    <div class="wrapper">
+      <h1>El arte de la transformación progresiva con Red Hat Enterprise Linux</h1>
+
+      <p class="subtitle">
+        La transformación digital no es un proyecto aislado. Es una práctica sostenida de evolución,
+        en la que la base operativa deja de ser un límite y se convierte en la plataforma que impulsa
+        velocidad, resiliencia y aprendizaje continuo.
+      </p>
+
+      <div class="meta">
+        Un enfoque narrativo inspirado en liderazgo organizacional.  
+        Basado en Red Hat Enterprise Linux&nbsp;10 (RHEL&nbsp;10).
+      </div>
+    </div>
+  </header>
+
+  <!-- Tabla de contenido -->
+  <nav class="toc">
+    <div class="wrapper">
+      <h2>Contenido</h2>
+      <ol>
+        <li><a href="#intro"><span class="num">0.</span>Introducción</a></li>
+        <li><a href="#cap1"><span class="num">1.</span>La transformación empieza en la base</a></li>
+        <li><a href="#cap2"><span class="num">2.</span>RHEL 10: el nuevo modelo operativo</a></li>
+        <li><a href="#cap3"><span class="num">3.</span>De la operación reactiva a la inteligencia adaptativa</a></li>
+        <li><a href="#cap4"><span class="num">4.</span>Equipos que aprenden, automatizan y avanzan</a></li>
+        <li><a href="#cap5"><span class="num">5.</span>Un marco para evolucionar</a></li>
+        <li><a href="#conclusion"><span class="num">6.</span>Conclusión</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- INTRODUCCIÓN -->
+    <div class="section-wrapper" id="intro">
+      <section class="chapter-header">
+        <div class="chapter-note">Introducción</div>
+        <h2>Transformar desde la base operativa</h2>
+        <p class="lead">
+          La modernización sostenible no consiste en adoptar lo último que aparece, sino en dar
+          a la organización una base capaz de evolucionar con disciplina, velocidad y confianza.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          La transformación digital no comienza en las aplicaciones que ve el usuario final,
+          sino en los cimientos que las sostienen cada día. El verdadero poder de una empresa
+          para innovar no reside únicamente en lanzar nuevas capacidades, sino en su capacidad
+          para hacerlas sostenibles.
+        </p>
+
+        <p>
+          Red Hat Enterprise Linux 10 (RHEL&nbsp;10) redefine esa base. No es solo una versión
+          nueva: es una plataforma que une estabilidad, agilidad e inteligencia para permitir
+          a las organizaciones avanzar sin perder control y modernizar sin detener el negocio.
+        </p>
+
+        <p>
+          La mayoría de las empresas ha modernizado una porción de su entorno.
+          El reto real está en el resto: los sistemas que soportan la continuidad diaria,
+          donde vive el riesgo operativo y el valor estratégico.
+        </p>
+
+        <p>
+          Con RHEL&nbsp;10, la modernización deja de ser una iniciativa puntual
+          para convertirse en una práctica continua: paso a paso, mejora a mejora,
+          decisión a decisión.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> La base operativa ya no es un lastre del pasado.
+          Es el punto de partida para construir velocidad, resiliencia y aprendizaje continuo.
+        </div>
+      </article>
+    </div>
+
+    <!-- CAPÍTULO 1 -->
+    <div class="section-wrapper" id="cap1">
+      <section class="chapter-header">
+        <div class="chapter-note">Capítulo 1</div>
+        <h2>La transformación empieza en la base</h2>
+        <p class="lead">
+          La ventaja competitiva no se define solo por la rapidez de lanzar algo nuevo,
+          sino por la capacidad de sostener esa rapidez con coherencia.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          Cada organización depende de una base operativa que determina su habilidad
+          para entregar valor de forma continua y confiable. La innovación solo
+          prospera cuando esa base es estable, segura y predecible.
+        </p>
+
+        <p>
+          RHEL ha sido, históricamente, ese cimiento de confianza.
+          Con RHEL&nbsp;10, esa base deja de ser estática y se convierte en una
+          plataforma viva, diseñada para adaptarse y mejorar al ritmo del negocio.
+          La estabilidad no es lo opuesto a la innovación; es su punto de partida.
+        </p>
+
+        <p>
+          Transformar la base no significa descartar lo existente.
+          Significa hacerlo evolucionar con método y propósito.
+          Las organizaciones más sólidas no persiguen la novedad por impulso:
+          fortalecen lo que ya las hace efectivas y amplían esa fortaleza.
+        </p>
+
+        <p>
+          Así comienza la transformación progresiva: sin ruptura,
+          sin improvisación, con pasos firmes hacia un futuro sostenible.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> La verdadera transformación no empieza en la capa visible
+          del negocio. Empieza en la disciplina con la que se cuida, fortalece y prepara la base.
+        </div>
+      </article>
+    </div>
+
+    <!-- CAPÍTULO 2 -->
+    <div class="section-wrapper" id="cap2">
+      <section class="chapter-header">
+        <div class="chapter-note">Capítulo 2</div>
+        <h2>RHEL 10: el nuevo modelo operativo</h2>
+        <p class="lead">
+          La infraestructura deja de ser un conjunto de servidores
+          y se convierte en un sistema que se construye, versiona y mejora como software.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          Comprender la base es solo el primer paso; el siguiente es
+          reinventar cómo se gestiona. RHEL&nbsp;10 introduce un modelo operativo
+          que adopta principios del desarrollo moderno: precisión, repetibilidad,
+          trazabilidad.
+        </p>
+
+        <p>
+          En el centro está <strong>Image Mode</strong>, un paradigma en el que cada
+          sistema nace a partir de imágenes inmutables, firmadas y versionadas.
+          Los entornos dejan de configurarse manualmente y pasan a ser componentes
+          consistentes, auditables y desplegables en minutos.
+        </p>
+
+        <p>
+          Este enfoque lleva la filosofía de <em>infraestructura como código</em>
+          al corazón del sistema operativo. Cada cambio se valida antes de aplicarse.
+          Cada despliegue es trazable. El error deja de ser una sorpresa
+          y se vuelve algo gestionable.
+        </p>
+
+        <p>
+          Aquí es donde la tecnología y la metodología se encuentran.
+          RHEL&nbsp;10 permite aplicar <strong>prácticas ágiles</strong> directamente
+          a la operación: iteraciones cortas, mejoras continuas, entregas pequeñas
+          que producen valor visible sin esperar a una “gran migración”.
+        </p>
+
+        <p>
+          Además, incorpora el enfoque <strong>Shift Left</strong>: la seguridad,
+          el cumplimiento y la validación dejan de ser pasos tardíos y se
+          integran desde el inicio. Se detectan riesgos antes de que escalen,
+          se reduce la variabilidad y se protege al negocio sin frenar el avance.
+        </p>
+
+        <p>
+          El resultado es una base que habla el mismo lenguaje que el negocio:
+          iterar rápido, validar temprano y mejorar constantemente, sin perder control.
+          RHEL&nbsp;10 es una plataforma Agile Ready.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> Con RHEL&nbsp;10, la infraestructura deja de
+          reaccionar al cambio y se convierte en un producto vivo:
+          versionado, seguro y preparado para evolucionar en cada iteración.
+        </div>
+      </article>
+    </div>
+
+    <!-- CAPÍTULO 3 -->
+    <div class="section-wrapper" id="cap3">
+      <section class="chapter-header">
+        <div class="chapter-note">Capítulo 3</div>
+        <h2>De la operación reactiva a la inteligencia adaptativa</h2>
+        <p class="lead">
+          Mantener estable ya no es suficiente. La infraestructura debe ser capaz
+          de anticipar, recomendar y actuar.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          Durante años, los equipos de TI trabajaron con una meta clara:
+          que nada se cayera. Pero la estabilidad que depende de sobreesfuerzo humano
+          tiene un límite. El desafío actual no es “mantener”, sino
+          <strong>aprender antes de fallar</strong>.
+        </p>
+
+        <p>
+          RHEL&nbsp;10 habilita ese cambio a través de inteligencia integrada.
+          <strong>Red Hat Insights</strong> analiza continuamente el estado de los sistemas,
+          identifica vulnerabilidades y recomienda acciones antes de que el impacto
+          llegue al negocio.
+        </p>
+
+        <p>
+          <strong>Ansible Automation Platform</strong> transforma esas recomendaciones
+          en ejecución confiable y trazable. Tareas que antes requerían intervención manual
+          pasan a ser acciones consistentes en toda la organización.
+        </p>
+
+        <p>
+          <strong>Lightspeed</strong> acerca aún más esa capacidad al día a día:
+          traduce intención humana en acción técnica mediante lenguaje natural.
+          La automatización deja de ser exclusiva del experto y pasa a ser
+          una herramienta accesible del equipo.
+        </p>
+
+        <p>
+          Con estas capacidades combinadas, la operación deja de vivir en modo alerta
+          y entra en modo anticipación. Se reduce el desgaste, sube la resiliencia,
+          y la organización pasa de reaccionar al cambio a dirigirlo.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> Cuando la operación incorpora inteligencia,
+          deja de apagar incendios y empieza a construir resiliencia.
+        </div>
+      </article>
+    </div>
+
+    <!-- CAPÍTULO 4 -->
+    <div class="section-wrapper" id="cap4">
+      <section class="chapter-header">
+        <div class="chapter-note">Capítulo 4</div>
+        <h2>Equipos que aprenden, automatizan y avanzan</h2>
+        <p class="lead">
+          La tecnología habilita el cambio, pero son las personas quienes lo convierten
+          en práctica diaria.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          El avance real ocurre cuando los equipos se transforman con la plataforma.
+          Con RHEL&nbsp;10, los profesionales de TI dejan de ser únicamente
+          administradores de infraestructura para convertirse en
+          <strong>arquitectos de la agilidad</strong>.
+        </p>
+
+        <p>
+          Diseñan entornos que son consistentes, reproducibles y seguros.
+          Cada despliegue deja registro. Cada corrección enseña algo.
+          Cada automatización captura conocimiento que puede escalarse.
+        </p>
+
+        <p>
+          Los equipos que operan con mentalidad ágil trabajan en ciclos cortos,
+          observan, ajustan, mejoran. Shift Left deja de ser una técnica
+          y se convierte en una actitud: anticipar, prevenir, construir calidad
+          desde el primer paso.
+        </p>
+
+        <p>
+          Este no es solo un cambio técnico: es un cambio de identidad.
+          La operación deja de ser vista como “costo de continuidad”
+          y pasa a ser una fuente de ventaja estratégica,
+          impulsada por talento humano que aprende continuamente.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> La mayor ventaja competitiva no es la
+          automatización por sí sola. Es el equipo que la diseña, la entiende
+          y la mejora en cada ciclo.
+        </div>
+      </article>
+    </div>
+
+    <!-- CAPÍTULO 5 -->
+    <div class="section-wrapper" id="cap5">
+      <section class="chapter-header">
+        <div class="chapter-note">Capítulo 5</div>
+        <h2>Un marco para evolucionar</h2>
+        <p class="lead">
+          El cambio sostenible no depende de la inspiración, sino del método.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          El progreso continuo necesita estructura.  
+          Red Hat propone un marco de evolución repetible:
+          <strong>Evaluar → Mejorar → Incorporar → Medir</strong>.
+        </p>
+
+        <p>
+          Más que una secuencia rígida, es un ritmo de trabajo.
+          Cada etapa impulsa la siguiente:
+        </p>
+
+        <ul class="value-list">
+          <li><strong>Evaluar</strong>: entender el punto de partida y las prioridades reales.</li>
+          <li><strong>Mejorar</strong>: eliminar fricciones, elevar la calidad operativa.</li>
+          <li><strong>Incorporar</strong>: sumar nuevas capacidades sin poner en riesgo la estabilidad.</li>
+          <li><strong>Medir</strong>: transformar los resultados en aprendizaje reutilizable.</li>
+        </ul>
+
+        <p>
+          Este método no busca una gran revolución única.  
+          Busca mejoras sostenidas que se acumulen con el tiempo.
+          Cada iteración fortalece la base, refina la operación
+          y aumenta la madurez tecnológica.
+        </p>
+
+        <p>
+          Evaluar, mejorar, incorporar y medir no son etapas aisladas:
+          son la respiración natural de una operación moderna.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> La modernización deja de ser un proyecto de TI
+          y se convierte en una práctica de liderazgo cuando existe un ciclo claro
+          que captura, aplica y amplifica el aprendizaje.
+        </div>
+      </article>
+    </div>
+
+    <!-- CONCLUSIÓN -->
+    <div class="section-wrapper" id="conclusion">
+      <section class="chapter-header">
+        <div class="chapter-note">Conclusión</div>
+        <h2>La transformación como práctica viva</h2>
+        <p class="lead">
+          El futuro no se improvisa. Se construye, un ciclo, una mejora y una decisión a la vez.
+        </p>
+      </section>
+
+      <article class="chapter-body">
+        <p>
+          La transformación progresiva surge cuando la tecnología, las personas
+          y la metodología se alinean en torno a un mismo propósito.
+          RHEL&nbsp;10 hace posible esa convergencia:
+          permite operar con disciplina ágil, inteligencia integrada
+          y misión compartida entre negocio y equipos.
+        </p>
+
+        <p>
+          Con esta base, la organización no solo mantiene estabilidad:
+          la convierte en motor de avance.  
+          No solo automatiza: aprende.  
+          No solo responde al cambio: empieza a dirigirlo.
+        </p>
+
+        <p>
+          El verdadero diferenciador ya no es adaptar la infraestructura
+          a la fuerza del mercado.  
+          Es construir una operación capaz de <em>aprender</em> con el mercado
+          y avanzar con intención.
+        </p>
+
+        <div class="key-takeaway">
+          <strong>Idea clave:</strong> La transformación deja de ser un hito
+          y se convierte en identidad operativa. Ese es el paso decisivo.
+        </div>
+      </article>
+    </div>
+
+  </main>
+
+  <!-- CTA final (similar al cierre de e-books públicos de Red Hat) -->
+  <footer class="cta">
+    <div class="wrapper">
+      <h2>Próximo paso</h2>
+      <p>
+        RHEL&nbsp;10 no es solo una plataforma técnica. Es la base para una cultura
+        operativa que aprende, se anticipa y mejora en ciclos cortos.
+        Es el punto de partida para construir velocidad con seguridad,
+        automatización con criterio y resiliencia con propósito.
+      </p>
+
+      <p class="action-note">
+        ¿Listo para llevar este modelo a tu organización?  
+        Define tu punto de partida. Evalúa. Mejora. Incorpora. Mide. Repite.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
+
